@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clase 1 — Web Responsive II</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       VARIABLES Y RESET
+    ============================================================ */
+    :root {
+      --azul:        #1a3a5c;
+      --azul-medio:  #2563a8;
+      --azul-claro:  #dbeafe;
+      --acento:      #f59e0b;
+      --acento-soft: #fef3c7;
+      --verde:       #16a34a;
+      --verde-soft:  #dcfce7;
+      --rojo:        #dc2626;
+      --rojo-soft:   #fee2e2;
+      --gris-100:    #f8fafc;
+      --gris-200:    #e2e8f0;
+      --gris-400:    #94a3b8;
+      --gris-700:    #334155;
+      --blanco:      #ffffff;
+      --texto:       #1e293b;
+      --navbar-h:    64px;
+      --radio:       10px;
+      --sombra:      0 4px 24px rgba(0,0,0,0.09);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--texto);
+      background: var(--gris-100);
+      line-height: 1.7;
+    }
+
+    img { max-width: 100%; border-radius: var(--radio); display: block; }
+
+    a { color: var(--azul-medio); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--navbar-h);
+      background: var(--azul);
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      gap: 1rem;
+    }
+
+    .nav-brand {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--acento);
+      font-weight: 600;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .nav-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--navbar-h);
+        left: 0; right: 0;
+        background: var(--azul);
+        flex-direction: column;
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.25rem;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.6rem 1rem; font-size: 0.9rem; }
+    }
+
+    /* ============================================================
+       LAYOUT BASE
+    ============================================================ */
+    .seccion {
+      padding: 5rem 1.5rem;
+      scroll-margin-top: var(--navbar-h);
+    }
+
+    .seccion-alt { background: var(--blanco); }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .seccion-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--gris-200);
+      padding-bottom: 1rem;
+    }
+
+    .seccion-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--azul-medio);
+      background: var(--azul-claro);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .seccion-header h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--azul);
+    }
+
+    /* ============================================================
+       PORTADA
+    ============================================================ */
+    #portada {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--azul) 0%, #0f2744 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      scroll-margin-top: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #portada::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(37,99,168,0.35) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(245,158,11,0.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .portada-modulo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      color: var(--acento);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .portada-clase {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .portada-titulo {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .portada-titulo span {
+      color: #93c5fd;
+    }
+
+    .portada-linea {
+      width: 60px;
+      height: 3px;
+      background: var(--acento);
+      margin: 0 auto 2rem;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .portada-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .meta-chip {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 0.5rem 1.2rem;
+      color: #cbd5e1;
+      font-size: 0.82rem;
+    }
+
+    .meta-chip strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .portada-img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      position: relative;
+      /* Descomentar cuando tengas la imagen:
+      background: url('../img/portada.jpg') center/cover;
+      height: 300px; */
+    }
+
+    /* Placeholder visual mientras no hay imagen */
+    .code-placeholder {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: #64748b;
+      text-align: left;
+      max-width: 480px;
+      line-height: 1.9;
+      position: relative;
+    }
+
+    .code-placeholder .c-green  { color: #4ade80; }
+    .code-placeholder .c-blue   { color: #93c5fd; }
+    .code-placeholder .c-yellow { color: #fde047; }
+    .code-placeholder .c-orange { color: #fb923c; }
+    .code-placeholder .c-gray   { color: #475569; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #475569;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-hint span { font-size: 1.2rem; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ============================================================
+       AGENDA
+    ============================================================ */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .agenda-card {
+      background: var(--gris-100);
+      border: 1px solid var(--gris-200);
+      border-left: 4px solid var(--azul-medio);
+      border-radius: var(--radio);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .agenda-card:hover {
+      box-shadow: var(--sombra);
+      transform: translateY(-2px);
+    }
+
+    .agenda-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .agenda-card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: 0.2rem;
+    }
+
+    .agenda-card p {
+      font-size: 0.83rem;
+      color: var(--gris-400);
+    }
+
+    /* ============================================================
+       PROPÓSITO
+    ============================================================ */
+    .proposito-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .proposito-grid { grid-template-columns: 1fr; }
+    }
+
+    .lead {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.15rem;
+      color: var(--azul);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .proposito-texto p {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: var(--gris-700);
+    }
+
+    .objetivo-box {
+      background: var(--azul-claro);
+      border-left: 4px solid var(--azul-medio);
+      border-radius: var(--radio);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .objetivo-box h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--azul-medio);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .objetivo-box p {
+      font-size: 0.92rem;
+      color: var(--azul);
+    }
+
+    .temas-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .temas-lista li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.92rem;
+      color: var(--gris-700);
+      padding: 0.6rem 0.75rem;
+      background: var(--gris-100);
+      border-radius: 8px;
+      border: 1px solid var(--gris-200);
+    }
+
+    .tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .tag-html { background: #fee2e2; color: #b91c1c; }
+    .tag-css  { background: #dbeafe; color: #1d4ed8; }
+    .tag-js   { background: #fef9c3; color: #854d0e; }
+    .tag-fw   { background: #f3e8ff; color: #7e22ce; }
+
+    /* ============================================================
+       FRONTEND / BACKEND
+    ============================================================ */
+    .fb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .fb-grid { grid-template-columns: 1fr; }
+    }
+
+    .fb-card {
+      border-radius: var(--radio);
+      padding: 1.75rem;
+      border: 1px solid var(--gris-200);
+    }
+
+    .fb-card.front { background: var(--azul-claro); border-color: #bfdbfe; }
+    .fb-card.back  { background: var(--verde-soft); border-color: #bbf7d0; }
+
+    .fb-card h3 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .fb-card.front h3 { color: #1d4ed8; }
+    .fb-card.back  h3 { color: #15803d; }
+
+    .fb-card .subtitulo {
+      font-size: 0.8rem;
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .fb-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .fb-card ul li {
+      font-size: 0.9rem;
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    .fb-card ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      opacity: 0.6;
+    }
+
+    .fb-img-wrap {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .fb-img-wrap img {
+      margin: 0 auto;
+      max-height: 300px;
+      object-fit: contain;
+    }
+
+    /* imagen placeholder hasta que la tengas */
+    .img-placeholder {
+      background: var(--gris-200);
+      border-radius: var(--radio);
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gris-400);
+      font-size: 0.85rem;
+      font-family: 'IBM Plex Mono', monospace;
+      border: 2px dashed var(--gris-400);
+    }
+
+    /* ============================================================
+       VS CODE
+    ============================================================ */
+    .vscode-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .vscode-intro { grid-template-columns: 1fr; }
+    }
+
+    .vscode-intro p {
+      font-size: 0.95rem;
+      color: var(--gris-700);
+      margin-bottom: 1rem;
+    }
+
+    .btn-descarga {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--azul-medio);
+      color: white;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-descarga:hover {
+      background: var(--azul);
+      text-decoration: none;
+      color: white;
+    }
+
+    .ext-titulo {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.2rem;
+      color: var(--azul);
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+    }
+
+    .ext-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .ext-card {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: var(--radio);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s;
+    }
+
+    .ext-card:hover { box-shadow: var(--sombra); }
+
+    .ext-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .ext-card h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: 0.2rem;
+    }
+
+    .ext-card p {
+      font-size: 0.8rem;
+      color: var(--gris-400);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       GIT
+    ============================================================ */
+    .git-que-es {
+      background: #0f172a;
+      border-radius: var(--radio);
+      padding: 2rem;
+      color: #e2e8f0;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .git-que-es { grid-template-columns: 1fr; }
+    }
+
+    .git-que-es h3 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.4rem;
+      color: #93c5fd;
+      margin-bottom: 0.75rem;
+    }
+
+    .git-que-es p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #94a3b8;
+    }
+
+    .git-analogia {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      color: #fbbf24;
+      margin-top: 1rem;
+    }
+
+    .git-analogia strong { color: #f59e0b; }
+
+    .conceptos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .concepto-card {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-top: 3px solid var(--azul-medio);
+      border-radius: var(--radio);
+      padding: 1.25rem;
+    }
+
+    .concepto-card h4 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--azul-medio);
+      margin-bottom: 0.5rem;
+    }
+
+    .concepto-card p {
+      font-size: 0.83rem;
+      color: var(--gris-700);
+      line-height: 1.5;
+    }
+
+    .git-subtitulo {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.15rem;
+      color: var(--azul);
+      margin: 2rem 0 1rem;
+      font-weight: 600;
+    }
+
+    .pasos-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .pasos-lista li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+    }
+
+    .paso-num {
+      background: var(--azul);
+      color: white;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .pasos-lista li .paso-texto strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--azul);
+      margin-bottom: 0.15rem;
+    }
+
+    .pasos-lista li .paso-texto span {
+      font-size: 0.82rem;
+      color: var(--gris-400);
+    }
+
+    /* Bloques de código */
+    .code-block {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 2;
+      color: #e2e8f0;
+    }
+
+    .code-block .cmd   { color: #4ade80; }
+    .code-block .flag  { color: #fbbf24; }
+    .code-block .str   { color: #f472b6; }
+    .code-block .cmt   { color: #475569; font-style: italic; }
+    .code-block .url   { color: #93c5fd; }
+
+    .code-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gris-400);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Flujo de trabajo Git */
+    .git-flujo {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .flujo-paso {
+      background: var(--azul-claro);
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .flujo-paso .fp-icon { font-size: 1.4rem; display: block; }
+    .flujo-paso .fp-txt  { font-size: 0.75rem; color: var(--azul); font-weight: 600; margin-top: 0.25rem; display: block; }
+
+    .flujo-flecha {
+      color: var(--azul-medio);
+      font-size: 1.4rem;
+      padding: 0 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       EJERCICIO
+    ============================================================ */
+    .ejercicio-intro {
+      background: var(--azul);
+      color: white;
+      border-radius: var(--radio);
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .ejercicio-intro h3 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .ejercicio-intro p {
+      font-size: 0.92rem;
+      color: #93c5fd;
+    }
+
+    .ejercicio-pasos {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .ej-paso {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: var(--radio);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .ej-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gris-200);
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 0.1rem;
+    }
+
+    .ej-paso h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: 0.4rem;
+    }
+
+    .ej-paso p {
+      font-size: 0.85rem;
+      color: var(--gris-700);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ============================================================
+       TAREA
+    ============================================================ */
+    .tarea-box {
+      background: linear-gradient(135deg, var(--acento-soft) 0%, #fff7e6 100%);
+      border: 2px solid var(--acento);
+      border-radius: var(--radio);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tarea-box h3 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.3rem;
+      color: #92400e;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tarea-box p {
+      font-size: 0.92rem;
+      color: #78350f;
+      margin-bottom: 0.75rem;
+    }
+
+    .tarea-req {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tarea-req li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: #78350f;
+    }
+
+    .tarea-req li::before {
+      content: '☐';
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: var(--acento);
+    }
+
+    .entrega-info {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: var(--radio);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .entrega-item span {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gris-400);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .entrega-item p {
+      font-size: 0.92rem;
+      color: var(--azul);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: var(--azul);
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.82rem;
+    }
+
+    .footer strong { color: white; }
+
+    /* ============================================================
+       UTILIDADES
+    ============================================================ */
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-azul   { background: var(--azul-claro); color: var(--azul-medio); }
+    .badge-verde  { background: var(--verde-soft);  color: var(--verde); }
+    .badge-rojo   { background: var(--rojo-soft);   color: var(--rojo); }
+    .badge-acento { background: var(--acento-soft); color: #b45309; }
+
+    .nota-tip {
+      background: var(--verde-soft);
+      border-left: 4px solid var(--verde);
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.25rem;
+      font-size: 0.88rem;
+      color: #166534;
+      margin: 1rem 0;
+    }
+
+    .nota-tip strong { font-weight: 700; }
+
+    .nota-atencion {
+      background: var(--rojo-soft);
+      border-left: 4px solid var(--rojo);
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.25rem;
+      font-size: 0.88rem;
+      color: #991b1b;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       NAVBAR
+  ======================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <span class="nav-brand">&lt;WebResponsive II /&gt;</span>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">&#9776;</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#portada">Inicio</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#proposito">Propósito</a></li>
+        <li><a href="#frontend-backend">Front/Back</a></li>
+        <li><a href="#vscode">VS Code</a></li>
+        <li><a href="#git">Git</a></li>
+        <li><a href="#ejercicio">Ejercicio</a></li>
+        <li><a href="#tarea">Tarea</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========================================================
+       PORTADA
+  ======================================================== -->
+  <section class="seccion" id="portada" style="scroll-margin-top:0; padding:0;">
+    <div id="portada" style="
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a3a5c 0%, #0f2744 100%);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; padding: 7rem 1.5rem 5rem;
+      position: relative; overflow: hidden;">
+
+      <!-- fondo decorativo -->
+      <div style="position:absolute;inset:0;pointer-events:none;
+        background: radial-gradient(circle at 18% 50%, rgba(37,99,168,.35) 0%, transparent 55%),
+                    radial-gradient(circle at 82% 20%, rgba(245,158,11,.12) 0%, transparent 50%);">
+      </div>
+
+      <p class="portada-modulo">Brigada de Comunicaciones · Módulo II · 2026</p>
+      <p class="portada-clase">Arquitectura y Diseño Web Responsive II — HTML, CSS y JS</p>
+      <h1 class="portada-titulo">
+        Clase 1<br />
+        <span>Introducción al Curso<br />y Entorno de Trabajo</span>
+      </h1>
+      <div class="portada-linea"></div>
+
+      <div class="portada-meta">
+        <div class="meta-chip"><strong>Instructor:</strong> Alférez de Navío Montes Girón Javier Estuardo</div>
+        <div class="meta-chip"><strong>Fecha:</strong> Miércoles 11 de marzo, 2026</div>
+        <div class="meta-chip"><strong>Horario:</strong> 07:00 – 11:00 hrs</div>
+      </div>
+
+      <!-- Código decorativo animado -->
+      <div class="code-placeholder">
+        <span class="c-gray">01 </span><span class="c-blue">&lt;!DOCTYPE</span> <span class="c-yellow">html</span><span class="c-blue">&gt;</span><br/>
+        <span class="c-gray">02 </span><span class="c-blue">&lt;html</span> <span class="c-orange">lang</span>=<span class="c-green">"es"</span><span class="c-blue">&gt;</span><br/>
+        <span class="c-gray">03 </span>&nbsp;&nbsp;<span class="c-blue">&lt;head&gt;</span><br/>
+        <span class="c-gray">04 </span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-blue">&lt;title&gt;</span><span class="c-green">Mi Primer Proyecto</span><span class="c-blue">&lt;/title&gt;</span><br/>
+        <span class="c-gray">05 </span>&nbsp;&nbsp;<span class="c-blue">&lt;/head&gt;</span><br/>
+        <span class="c-gray">06 </span>&nbsp;&nbsp;<span class="c-blue">&lt;body&gt;</span><br/>
+        <span class="c-gray">07 </span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-blue">&lt;h1&gt;</span><span class="c-green">¡Bienvenidos!</span><span class="c-blue">&lt;/h1&gt;</span><br/>
+        <span class="c-gray">08 </span>&nbsp;&nbsp;<span class="c-blue">&lt;/body&gt;</span><br/>
+        <span class="c-gray">09 </span><span class="c-blue">&lt;/html&gt;</span>
+      </div>
+
+      <a href="#agenda" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+        color:#475569;font-size:0.78rem;display:flex;flex-direction:column;align-items:center;
+        gap:.4rem;animation:bounce 2s infinite;text-decoration:none;">
+        ver agenda <span style="font-size:1.2rem;">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       AGENDA
+  ======================================================== -->
+  <section class="seccion" id="agenda">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">00</span>
+        <h2>Agenda del Día</h2>
+      </div>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="agenda-icon">🎯</span>
+          <div>
+            <h3>Propósito del curso</h3>
+            <p>¿Qué vamos a aprender y por qué importa?</p>
+          </div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">🌐</span>
+          <div>
+            <h3>Frontend vs Backend</h3>
+            <p>Roles y diferencias en el desarrollo web profesional</p>
+          </div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">💻</span>
+          <div>
+            <h3>VS Code</h3>
+            <p>Instalación y extensiones esenciales del curso</p>
+          </div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">🐙</span>
+          <div>
+            <h3>Git</h3>
+            <p>Control de versiones: qué es, para qué y cómo se usa</p>
+          </div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">⚡</span>
+          <div>
+            <h3>Ejercicio en clase</h3>
+            <p>Configurar entorno y crear el primer repositorio</p>
+          </div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">📋</span>
+          <div>
+            <h3>Tarea</h3>
+            <p>Primera página HTML con estructura semántica</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       PROPÓSITO
+  ======================================================== -->
+  <section class="seccion seccion-alt" id="proposito">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">01</span>
+        <h2>Propósito del Curso</h2>
+      </div>
+      <div class="proposito-grid">
+        <div class="proposito-texto">
+          <p class="lead">Este curso lleva el desarrollo web al siguiente nivel. Ya conocés las bases — ahora las vamos a dominar.</p>
+          <p>Durante 7 semanas trabajaremos con las herramientas y técnicas que usan los desarrolladores web profesionales hoy: diseño responsive, CSS avanzado, JavaScript para interfaces interactivas y Bootstrap 5.</p>
+          <p>Cada clase combina teoría con práctica inmediata. Al final del módulo tendrás un <strong>proyecto completo publicado en internet</strong>.</p>
+          <div class="objetivo-box">
+            <h3>🏁 Objetivo General</h3>
+            <p>Al finalizar el curso serás capaz de diseñar, desarrollar y publicar sitios web responsive y funcionales, aplicando HTML5 semántico, CSS avanzado, JavaScript vanilla y Bootstrap 5.</p>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gris-400);margin-bottom:1rem;">¿Qué cubriremos?</p>
+          <ul class="temas-lista">
+            <li><span class="tag tag-html">HTML</span> HTML5 semántico y accesibilidad</li>
+            <li><span class="tag tag-css">CSS</span> Variables, BEM, Flexbox, Grid</li>
+            <li><span class="tag tag-css">CSS</span> Responsive · Media Queries · clamp()</li>
+            <li><span class="tag tag-fw">FW</span> Bootstrap 5 · Componentes y Grid</li>
+            <li><span class="tag tag-js">JS</span> DOM · Eventos · Fetch API</li>
+            <li><span class="tag tag-css">CSS</span> Animaciones y Transiciones</li>
+            <li><span class="tag tag-js">JS</span> Performance Web · DevTools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FRONTEND / BACKEND
+  ======================================================== -->
+  <section class="seccion" id="frontend-backend">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">02</span>
+        <h2>Frontend vs Backend</h2>
+      </div>
+
+      <div class="fb-grid">
+        <div class="fb-card front">
+          <h3>🖥️ Frontend</h3>
+          <p class="subtitulo">Lo que el usuario VE e INTERACTÚA</p>
+          <ul>
+            <li>HTML — estructura del contenido</li>
+            <li>CSS — estilos y presentación visual</li>
+            <li>JavaScript — comportamiento e interactividad</li>
+            <li>Corre en el <strong>navegador</strong> del usuario</li>
+            <li>Se preocupa por: diseño, UX, accesibilidad, responsive</li>
+          </ul>
+        </div>
+        <div class="fb-card back">
+          <h3>⚙️ Backend</h3>
+          <p class="subtitulo">Lo que ocurre en el SERVIDOR</p>
+          <ul>
+            <li>Lenguajes: Python, PHP, Node.js, Java...</li>
+            <li>Bases de datos: MySQL, PostgreSQL, MongoDB</li>
+            <li>APIs que entregan los datos al frontend</li>
+            <li>Corre en el <strong>servidor</strong></li>
+            <li>Se preocupa por: seguridad, rendimiento, lógica de negocio</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- IMAGEN: diagrama frontend-backend. Agregar img/frontend-backend.png -->
+      <div class="fb-img-wrap">
+        <img src="img/frontend-backend.png.jpg" alt="Diagrama Frontend vs Backend" />
+      </div>
+
+      <div class="nota-tip" style="margin-top:1.5rem;">
+        <strong>🎯 Nuestro enfoque:</strong> Este curso cubre el <strong>100% del Frontend</strong>. Vamos a dominar HTML, CSS y JavaScript — las tres tecnologías que construyen todo lo que el usuario ve en la web.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       VS CODE
+  ======================================================== -->
+  <section class="seccion seccion-alt" id="vscode">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">03</span>
+        <h2>VS Code — Nuestro Editor</h2>
+      </div>
+
+      <div class="vscode-intro">
+        <div>
+          <p>Visual Studio Code es el editor de código más popular del mundo para desarrollo web. Es <strong>gratuito, liviano y extremadamente poderoso</strong> gracias a sus extensiones.</p>
+          <p>Lo desarrolla Microsoft y tiene soporte oficial para HTML, CSS y JavaScript — exactamente lo que necesitamos.</p>
+          <a href="https://code.visualstudio.com/" target="_blank" class="btn-descarga">⬇️ Descargar VS Code</a>
+        </div>
+        <!-- IMAGEN: screenshot VS Code. Agregar img/vscode.png -->
+        <div>
+          <img src="img/vscode.png" alt="Visual Studio Code" />
+        </div>
+      </div>
+
+      <p class="ext-titulo">🧩 Extensiones Esenciales</p>
+      <div class="ext-grid">
+
+        <div class="ext-card">
+          <span class="ext-icon">🌐</span>
+          <div>
+            <h4>Live Server</h4>
+            <p>Abre tu HTML en el navegador y lo recarga automáticamente cada vez que guardás. Esencial para ver cambios en tiempo real.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">🎨</span>
+          <div>
+            <h4>Prettier — Code Formatter</h4>
+            <p>Formatea automáticamente tu código para mantenerlo ordenado y legible. Se activa al guardar.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">💡</span>
+          <div>
+            <h4>IntelliSense for CSS</h4>
+            <p>Autocompletado inteligente para clases CSS dentro de tus archivos HTML. Evita errores de tipeo.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">🔵</span>
+          <div>
+            <h4>HTML CSS Support</h4>
+            <p>Sugiere clases CSS definidas en tus archivos de estilo mientras escribís HTML. Ahorra tiempo.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">🌈</span>
+          <div>
+            <h4>Color Highlight</h4>
+            <p>Muestra una vista previa del color directamente en el código. Útil al trabajar con paletas CSS.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">⚡</span>
+          <div>
+            <h4>Auto Rename Tag</h4>
+            <p>Cuando renombrás una etiqueta HTML de apertura, la de cierre se actualiza automáticamente.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">📦</span>
+          <div>
+            <h4>Bootstrap 5 Quick Snippets</h4>
+            <p>Atajos de teclado para insertar componentes Bootstrap sin tener que memorizar todas las clases.</p>
+          </div>
+        </div>
+
+        <div class="ext-card">
+          <span class="ext-icon">🐙</span>
+          <div>
+            <h4>GitLens</h4>
+            <p>Integración avanzada con Git directo en VS Code. Ver historial, quién modificó qué línea y cuándo.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- IMAGEN: panel de extensiones VS Code. Agregar img/vscode-extensiones.png -->
+      <div style="margin-top:1.5rem;">
+        <img src="img/vscode-extensiones.jpg" alt="Extensiones VS Code" />
+      </div>
+
+      <div class="nota-tip" style="margin-top:1.5rem;">
+        <strong>💡 Atajo clave:</strong> Para instalar extensiones, presioná <code style="background:#dcfce7;padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;">Ctrl + Shift + X</code> y buscá por nombre.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       GIT
+  ======================================================== -->
+  <section class="seccion" id="git">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">04</span>
+        <h2>Git — Control de Versiones</h2>
+      </div>
+
+      <!-- ¿Qué es Git? -->
+      <div class="git-que-es">
+        <div>
+          <h3>¿Qué es Git?</h3>
+          <p>Git es un sistema de <strong style="color:#e2e8f0;">control de versiones distribuido</strong>. Registra todos los cambios que hacés en tu código a lo largo del tiempo, permitiéndote volver a cualquier versión anterior.</p>
+          <p style="margin-top:.75rem;">Fue creado por <strong style="color:#e2e8f0;">Linus Torvalds</strong> en 2005 — el mismo creador de Linux. Hoy es el estándar absoluto de la industria.</p>
+          <div class="git-analogia">
+            <strong>🕹️ Analogía:</strong> Git es como el botón de "guardar partida" en un videojuego. Podés guardar en cualquier momento y si algo sale mal, volvés al punto de guardado anterior sin perder nada.
+          </div>
+        </div>
+        <div>
+          <!-- IMAGEN: logo Git. Agregar img/git-logo.png -->
+          <img src="img/git-logo.jpg" alt="Git" style="max-height:120px;margin:0 auto 1rem;">
+          <br/>
+          <p style="font-size:.85rem;color:#94a3b8;">Git guarda tu historial <strong style="color:#e2e8f0;">localmente</strong> en tu máquina. GitHub / GitLab lo guardan en la <strong style="color:#e2e8f0;">nube</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Conceptos clave -->
+      <p class="git-subtitulo">📚 Conceptos Clave</p>
+      <div class="conceptos-grid">
+
+        <div class="concepto-card">
+          <h4>Repositorio (repo)</h4>
+          <p>La carpeta de tu proyecto con todo el historial de cambios. Puede ser local (en tu PC) o remoto (en GitHub).</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Commit</h4>
+          <p>Un "punto de guardado" con un mensaje descriptivo. Registra qué cambió, quién y cuándo.</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Branch (rama)</h4>
+          <p>Una línea de trabajo independiente. Permite desarrollar funcionalidades sin afectar el código principal.</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Merge</h4>
+          <p>Unir los cambios de una rama con otra. Así se integran nuevas funciones al proyecto principal.</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Push</h4>
+          <p>Enviar tus commits del repositorio local al repositorio remoto (GitHub).</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Pull</h4>
+          <p>Descargar los cambios del repositorio remoto a tu máquina local.</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Clone</h4>
+          <p>Copiar un repositorio remoto completo (con todo su historial) a tu máquina local.</p>
+        </div>
+
+        <div class="concepto-card">
+          <h4>Stage (Index)</h4>
+          <p>Área intermedia donde seleccionás qué archivos incluir en el próximo commit.</p>
+        </div>
+
+      </div>
+
+      <!-- Flujo de trabajo -->
+      <p class="git-subtitulo">🔄 Flujo de Trabajo Básico</p>
+      <div class="git-flujo">
+        <div class="flujo-paso">
+          <span class="fp-icon">✏️</span>
+          <span class="fp-txt">Modificás<br/>archivos</span>
+        </div>
+        <span class="flujo-flecha">→</span>
+        <div class="flujo-paso">
+          <span class="fp-icon">📂</span>
+          <span class="fp-txt">git add<br/>(stage)</span>
+        </div>
+        <span class="flujo-flecha">→</span>
+        <div class="flujo-paso">
+          <span class="fp-icon">💾</span>
+          <span class="fp-txt">git commit<br/>(guardar)</span>
+        </div>
+        <span class="flujo-flecha">→</span>
+        <div class="flujo-paso">
+          <span class="fp-icon">☁️</span>
+          <span class="fp-txt">git push<br/>(subir)</span>
+        </div>
+        <span class="flujo-flecha">→</span>
+        <div class="flujo-paso" style="background:var(--verde-soft);border-color:#bbf7d0;">
+          <span class="fp-icon">✅</span>
+          <span class="fp-txt" style="color:#15803d;">¡Listo en<br/>GitHub!</span>
+        </div>
+      </div>
+
+      <!-- Crear cuenta GitHub -->
+      <p class="git-subtitulo">🐙 Paso previo: Crear tu cuenta en GitHub</p>
+      <p style="font-size:.93rem;color:var(--gris-700);margin-bottom:1.25rem;">
+        Antes de instalar Git, necesitás tener una cuenta en <strong>GitHub</strong> — la plataforma más grande del mundo para alojar repositorios y colaborar en proyectos de código.
+      </p>
+
+      <ul class="pasos-lista" style="margin-bottom:1.5rem;">
+        <li>
+          <span class="paso-num">1</span>
+          <div class="paso-texto">
+            <strong>Ir a github.com</strong>
+            <span>Abrí tu navegador y visitá <a href="https://github.com/" target="_blank">https://github.com/</a></span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">2</span>
+          <div class="paso-texto">
+            <strong>Hacer clic en "Sign up"</strong>
+            <span>Botón ubicado en la esquina superior derecha de la página.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">3</span>
+          <div class="paso-texto">
+            <strong>Ingresar tu correo electrónico</strong>
+            <span>Usá un correo al que tengas acceso. Lo necesitarás para verificar la cuenta.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">4</span>
+          <div class="paso-texto">
+            <strong>Crear una contraseña segura</strong>
+            <span>Mínimo 8 caracteres, combinando letras, números y símbolos.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">5</span>
+          <div class="paso-texto">
+            <strong>Elegir tu nombre de usuario</strong>
+            <span>Este nombre será visible públicamente en todos tus repositorios. Usá algo profesional, por ejemplo: <code style="font-family:'IBM Plex Mono',monospace;background:var(--gris-200);padding:.1rem .4rem;border-radius:4px;">jmontes-dev</code>. No uses espacios ni caracteres especiales.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">6</span>
+          <div class="paso-texto">
+            <strong>Verificar que no sos un robot 🤖</strong>
+            <span>Completar el captcha de verificación que aparece en pantalla.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">7</span>
+          <div class="paso-texto">
+            <strong>Confirmar tu correo electrónico</strong>
+            <span>GitHub te enviará un código de 6 dígitos al correo. Ingresalo para activar tu cuenta.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">8</span>
+          <div class="paso-texto">
+            <strong>¡Listo! Ya tenés tu cuenta</strong>
+            <span>Podés personalizar tu perfil en <strong>Settings → Profile</strong>. Agregá tu nombre real, foto y una breve descripción.</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="nota-tip" style="margin-bottom:2rem;">
+        <strong>💡 Recomendaciones para tu usuario de GitHub:</strong> Elegí un nombre corto, profesional y fácil de recordar. Este usuario aparecerá en la URL de todos tus proyectos: <code style="background:#dcfce7;padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;">github.com/tu-usuario</code>. Muchos reclutadores revisan perfiles de GitHub, ¡hacelo presentable!
+      </div>
+
+      <!-- Instalación -->
+      <p class="git-subtitulo">⬇️ Instalación de Git</p>
+      <ul class="pasos-lista">
+        <li>
+          <span class="paso-num">1</span>
+          <div class="paso-texto">
+            <strong>Descargar Git</strong>
+            <span>Ir a <a href="https://git-scm.com/downloads" target="_blank">git-scm.com/downloads</a> y descargar el instalador para Windows.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">2</span>
+          <div class="paso-texto">
+            <strong>Ejecutar el instalador</strong>
+            <span>Dejar todas las opciones por defecto. En "Default editor" podés seleccionar VS Code.</span>
+          </div>
+        </li>
+        <li>
+          <span class="paso-num">3</span>
+          <div class="paso-texto">
+            <strong>Verificar la instalación</strong>
+            <span>Abrir Git Bash o la terminal y ejecutar el siguiente comando:</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="code-label">Terminal / Git Bash</div>
+      <div class="code-block">
+        <pre><span class="cmd">git</span> <span class="flag">--version</span>
+<span class="cmt"># Deberías ver algo como: git version 2.43.0</span></pre>
+      </div>
+
+      <!-- Configuración inicial -->
+      <p class="git-subtitulo">⚙️ Configuración Inicial (una sola vez)</p>
+      <div class="code-label">Terminal — Registrar tu identidad</div>
+      <div class="code-block">
+        <pre><span class="cmt"># Registrar tu nombre (aparecerá en cada commit)</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> user.name <span class="str">"Tu Nombre Completo"</span>
+
+<span class="cmt"># Registrar tu correo</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> user.email <span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a0d4d5c3cfd2d2c5cfe0c5cac5cdd0cccf8ec3cfcd">[email&#160;protected]</a>"</span>
+
+<span class="cmt"># Verificar la configuración</span>
+<span class="cmd">git config</span> <span class="flag">--list</span></pre>
+      </div>
+
+      <!-- Comandos principales -->
+      <p class="git-subtitulo">🛠️ Comandos Principales</p>
+      <div class="code-label">Flujo completo de trabajo</div>
+      <div class="code-block">
+        <pre><span class="cmt"># 1. Iniciar un repositorio en la carpeta actual</span>
+<span class="cmd">git init</span>
+
+<span class="cmt"># 2. Ver el estado de tus archivos</span>
+<span class="cmd">git status</span>
+
+<span class="cmt"># 3. Agregar archivos al stage (preparar para commit)</span>
+<span class="cmd">git add</span> index.html            <span class="cmt"># un archivo específico</span>
+<span class="cmd">git add</span> <span class="flag">.</span>                   <span class="cmt"># todos los archivos</span>
+
+<span class="cmt"># 4. Guardar un commit con mensaje</span>
+<span class="cmd">git commit</span> <span class="flag">-m</span> <span class="str">"Primer commit: estructura inicial del proyecto"</span>
+
+<span class="cmt"># 5. Conectar con repositorio remoto en GitHub</span>
+<span class="cmd">git remote add</span> origin <span class="url">https://github.com/usuario/mi-repo.git</span>
+
+<span class="cmt"># 6. Subir los commits a GitHub</span>
+<span class="cmd">git push</span> <span class="flag">-u</span> origin main</pre>
+      </div>
+
+      <!-- Ramas -->
+      <p class="git-subtitulo">🌿 Trabajando con Ramas</p>
+      <div class="code-block">
+        <pre><span class="cmt"># Ver todas las ramas</span>
+<span class="cmd">git branch</span>
+
+<span class="cmt"># Crear una nueva rama</span>
+<span class="cmd">git branch</span> <span class="str">nombre-de-la-rama</span>
+
+<span class="cmt"># Cambiar a una rama</span>
+<span class="cmd">git checkout</span> <span class="str">nombre-de-la-rama</span>
+
+<span class="cmt"># Crear rama y cambiar a ella en un solo comando</span>
+<span class="cmd">git checkout</span> <span class="flag">-b</span> <span class="str">nueva-funcionalidad</span>
+
+<span class="cmt"># Unir (merge) una rama con la principal</span>
+<span class="cmd">git checkout</span> main
+<span class="cmd">git merge</span> <span class="str">nueva-funcionalidad</span></pre>
+      </div>
+
+      <div class="nota-tip">
+        <strong>💡 Buena práctica para mensajes de commit:</strong> Usa verbos en presente y sé descriptivo. Ejemplo: <code style="background:#dcfce7;padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;">"Agrega sección de contacto con formulario"</code> — no solo <code style="background:#dcfce7;padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;">"cambios"</code>.
+      </div>
+
+      <div class="nota-atencion" style="margin-top:.75rem;">
+        <strong>⚠️ Importante:</strong> Nunca hagas commit de contraseñas, tokens o archivos con información sensible. Usá un archivo <code style="background:#fee2e2;padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;">.gitignore</code> para excluirlos.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       EJERCICIO
+  ======================================================== -->
+  <section class="seccion seccion-alt" id="ejercicio">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">05</span>
+        <h2>Ejercicio en Clase</h2>
+      </div>
+
+      <div class="ejercicio-intro">
+        <h3>⚡ Configurar el entorno y crear el primer repositorio</h3>
+        <p>Vamos a hacer todo esto juntos, paso a paso. Al terminar, cada uno tendrá su entorno listo y su primer repositorio en GitHub.</p>
+      </div>
+
+      <div class="ejercicio-pasos">
+
+        <div class="ej-paso">
+          <span class="ej-num">01</span>
+          <div>
+            <h4>Instalar VS Code</h4>
+            <p>Descargar desde <a href="https://code.visualstudio.com/" target="_blank">code.visualstudio.com</a> e instalar con las opciones por defecto.</p>
+            <div class="code-label">Verificar</div>
+            <div class="code-block"><pre><span class="cmd">code</span> <span class="flag">--version</span></pre></div>
+          </div>
+        </div>
+
+        <div class="ej-paso">
+          <span class="ej-num">02</span>
+          <div>
+            <h4>Instalar las extensiones esenciales</h4>
+            <p>Abrir VS Code → Presionar <strong>Ctrl + Shift + X</strong> → Buscar e instalar: Live Server, Prettier, Auto Rename Tag, Color Highlight.</p>
+          </div>
+        </div>
+
+        <div class="ej-paso">
+          <span class="ej-num">03</span>
+          <div>
+            <h4>Instalar Git y configurar identidad</h4>
+            <div class="code-block">
+              <pre><span class="cmd">git config</span> <span class="flag">--global</span> user.name <span class="str">"Tu Nombre"</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> user.email <span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2b6b7a1adb0b0a7ad82a7a8a7afb2aeadeca1adaf">[email&#160;protected]</a>"</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="ej-paso">
+          <span class="ej-num">04</span>
+          <div>
+            <h4>Crear cuenta en GitHub</h4>
+            <p>Ir a <a href="https://github.com" target="_blank">github.com</a> y crear una cuenta gratuita si aún no tienen una. Usar el mismo correo que configuraron en Git.</p>
+          </div>
+        </div>
+
+        <div class="ej-paso">
+          <span class="ej-num">05</span>
+          <div>
+            <h4>Crear el repositorio del curso en GitHub</h4>
+            <p>En GitHub: <strong>New repository</strong> → Nombre: <code style="font-family:'IBM Plex Mono',monospace;background:var(--gris-200);padding:.1rem .4rem;border-radius:4px;">curso-web-responsive-2026</code> → Público → <em>Initialize with README</em> → Create.</p>
+          </div>
+        </div>
+
+        <div class="ej-paso">
+          <span class="ej-num">06</span>
+          <div>
+            <h4>Clonar el repositorio y hacer el primer commit</h4>
+            <div class="code-block">
+              <pre><span class="cmt"># Clonar el repositorio a tu máquina</span>
+<span class="cmd">git clone</span> <span class="url">https://github.com/tu-usuario/curso-web-responsive-2026.git</span>
+
+<span class="cmt"># Entrar a la carpeta</span>
+<span class="cmd">cd</span> curso-web-responsive-2026
+
+<span class="cmt"># Crear el primer archivo HTML</span>
+<span class="cmt"># (Crear index.html en VS Code con estructura básica)</span>
+
+<span class="cmt"># Agregar, commitear y subir</span>
+<span class="cmd">git add</span> <span class="flag">.</span>
+<span class="cmd">git commit</span> <span class="flag">-m</span> <span class="str">"Clase 01: estructura inicial del proyecto"</span>
+<span class="cmd">git push</span></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="nota-tip" style="margin-top:1.5rem;">
+        <strong>✅ Al terminar este ejercicio deberías tener:</strong> VS Code instalado con extensiones, Git configurado, cuenta en GitHub activa y tu primer repositorio con al menos un commit.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       TAREA
+  ======================================================== -->
+  <section class="seccion" id="tarea">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">06</span>
+        <h2>Tarea</h2>
+      </div>
+
+      <div class="tarea-box">
+        <h3>📋 Página HTML con Estructura Semántica</h3>
+        <p>Crear una página HTML completa usando las etiquetas semánticas de HTML5. El tema es libre — puede ser sobre vos, un hobby, un deporte o cualquier tema de interés.</p>
+        <ul class="tarea-req">
+          <li>Usar estructura semántica: <code style="font-family:'IBM Plex Mono',monospace;">&lt;header&gt;</code>, <code style="font-family:'IBM Plex Mono',monospace;">&lt;nav&gt;</code>, <code style="font-family:'IBM Plex Mono',monospace;">&lt;main&gt;</code>, <code style="font-family:'IBM Plex Mono',monospace;">&lt;section&gt;</code>, <code style="font-family:'IBM Plex Mono',monospace;">&lt;article&gt;</code>, <code style="font-family:'IBM Plex Mono',monospace;">&lt;footer&gt;</code></li>
+          <li>Incluir al menos: un encabezado, navegación, 2 secciones de contenido y pie de página</li>
+          <li>Agregar al menos una imagen con atributo <code style="font-family:'IBM Plex Mono',monospace;">alt</code> correctamente descriptivo</li>
+          <li>Incluir una lista (ordenada o desordenada) y una tabla</li>
+          <li>Aplicar CSS básico en un archivo <code style="font-family:'IBM Plex Mono',monospace;">style.css</code> externo</li>
+          <li>Subir el proyecto al repositorio de GitHub creado en clase</li>
+          <li>El mensaje del commit debe ser descriptivo: <em>"Clase 01 - tarea: página HTML semántica sobre [tema]"</em></li>
+        </ul>
+      </div>
+
+      <div class="entrega-info">
+        <div class="entrega-item">
+          <span>📅 Entrega</span>
+          <p>Próxima clase — Viernes 13 de marzo</p>
+        </div>
+        <div class="entrega-item">
+          <span>📤 Medio</span>
+          <p>Repositorio GitHub (compartir el link)</p>
+        </div>
+        <div class="entrega-item">
+          <span>⭐ Punteo</span>
+          <p>Zona — 4.5 pts totales del curso</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FOOTER
+  ======================================================== -->
+  <footer class="footer">
+    <p>
+      <strong>Clase 1 — Arquitectura y Diseño Web Responsive II</strong><br />
+      Instructor: Alférez de Navío Montes Girón Javier Estuardo ·
+      Brigada de Comunicaciones · Módulo II 2026
+    </p>
+  </footer>
+
+  <!-- ========================================================
+       JAVASCRIPT
+  ======================================================== -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ----- Toggle menú móvil -----
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+
+    // Cerrar menú al hacer click en un link
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+
+    // ----- Marcar link activo según sección visible -----
+    const secciones = document.querySelectorAll('section[id], div[id]');
+    const navItems  = document.querySelectorAll('.nav-links a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isInt
